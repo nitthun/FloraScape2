@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloraScape - ทุ่งดอกไม้ดิจิทัลแบบโต้ตอบ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Canvas -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="app-container">
+
+        <!-- ── Left Sidebar (always visible) ─────────────────────────── -->
+        <aside class="sidebar" id="left-sidebar">
+            <div class="brand">
+                <h1>FloraScape</h1>
+                <p class="subtitle">ทุ่งดอกไม้ดิจิทัล</p>
+            </div>
+
+            <!-- Panel: Sound Toggle -->
+            <div class="control-section audio-section">
+                <button id="sound-btn" class="glass-btn pulse-effect" title="เปิด/ปิดเสียง">
+                    <svg class="icon sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <svg class="icon sound-off-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                    <span>เสียงธรรมชาติ</span>
+                </button>
+            </div>
+
+            <!-- Panel: Color Picker -->
+            <div class="control-section">
+                <h2>โทนสีดอกไม้</h2>
+                <div class="color-palette" id="color-palette">
+                    <button class="color-dot active" data-color="red" style="--dot-color: #ef4444;" title="สีแดง"></button>
+                    <button class="color-dot" data-color="pink" style="--dot-color: #f472b6;" title="สีชมพู"></button>
+                    <button class="color-dot" data-color="orange" style="--dot-color: #f97316;" title="สีส้ม"></button>
+                    <button class="color-dot" data-color="yellow" style="--dot-color: #facc15;" title="สีเหลือง"></button>
+                    <button class="color-dot" data-color="purple" style="--dot-color: #a78bfa;" title="สีม่วง"></button>
+                    <button class="color-dot" data-color="blue" style="--dot-color: #3b82f6;" title="สีน้ำเงิน"></button>
+                    <button class="color-dot" data-color="white" style="--dot-color: #ffffff;" title="สีขาว"></button>
+                    <!-- Rare Colors -->
+                    <button class="color-dot rare" data-color="gold" style="--dot-color: #fbbf24;" title="สีทอง"></button>
+                    <button class="color-dot rare" data-color="glow" style="--dot-color: #22d3ee;" title="สีเรืองแสง"></button>
+                    <button class="color-dot rare" data-color="rainbow" style="--dot-color: linear-gradient(45deg, #ef4444, #facc15, #22c55e, #3b82f6, #a78bfa);" title="สีรุ้ง"></button>
+                </div>
+            </div>
+
+            <!-- Panel: Environment Settings -->
+            <div class="control-section">
+                <h2>สภาพแวดล้อม</h2>
+
+                <!-- Auto Weather Autopilot Toggle -->
+                <div class="toggle-group-row">
+                    <span>สภาพอากาศรันเอง</span>
+                    <label class="switch">
+                        <input type="checkbox" id="auto-weather-toggle" checked>
+                        <span class="slider-switch round"></span>
+                    </label>
+                </div>
+
+                <!-- Time of Day Slider -->
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>เวลาในทุ่งดอกไม้</span>
+                        <span id="time-value" class="value-badge">เที่ยงวัน</span>
+                    </div>
+                    <input type="range" id="time-slider" min="0" max="24" step="0.1" value="12" class="custom-slider">
+                </div>
+
+                <!-- Wind Speed Slider -->
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>ความแรงลม</span>
+                        <span id="wind-value" class="value-badge">ลมอ่อนๆ</span>
+                    </div>
+                    <input type="range" id="wind-slider" min="0.1" max="5" step="0.1" value="1.2" class="custom-slider">
+                </div>
+
+                <!-- Rain Control Toggle -->
+                <div class="toggle-group">
+                    <button id="rain-btn" class="glass-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path>
+                            <line x1="8" y1="16" x2="8" y2="22"></line>
+                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                            <line x1="16" y1="16" x2="16" y2="22"></line>
+                        </svg>
+                        <span>เปิดฝนตก</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel: Actions -->
+            <div class="control-section action-buttons">
+                <button class="glass-btn" id="auto-btn">
+                    <span class="icon">✨</span>
+                    <span>สุ่มปลูก (Auto Plant)</span>
+                </button>
+                <button class="glass-btn danger" id="clear-btn">
+                    <span class="icon">🗑️</span>
+                    <span>ล้างทุ่งดอกไม้</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ── Right Collection Panel ─────────────────────────────────── -->
+        <div class="collection-panel" id="gachaCollection">
+            <div class="collection-header">
+                <span class="collection-icon">🌸</span>
+                <h3>My Garden</h3>
+                <span class="collection-count-badge" id="collection-total">0</span>
+            </div>
+            <div id="collectionList" class="collection-grid">
+                <!-- Flower cards appear here -->
+                <div class="collection-empty">
+                    <span>🌱</span>
+                    <p>เริ่มปลูกดอกไม้<br>เพื่อเพิ่มในสวน</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Instructions Banner (Hidden) -->
+        <div id="instructions" class="instructions-overlay" style="display:none;">
+            <div class="instructions-content">
+                <svg class="click-icon animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 32px; height: 32px; margin: 0 auto 12px; color: #a78bfa;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <p>เลือกเครื่องมือด้านล่างเพื่อเริ่มเล่น</p>
+                <button id="close-instructions-btn">เข้าใจแล้ว</button>
+            </div>
+        </div>
+
+        <!-- Bottom Toolbar -->
+        <div class="toolbar-panel">
+            <button class="tool-btn active" data-tool="plant" title="ปลูกดอกไม้ (คลิกที่พื้นดิน)">
+                <span class="tool-icon">🌱</span>
+                <span class="tool-label">ปลูก</span>
+            </button>
+            <button class="tool-btn" data-tool="water" title="บัวรดน้ำวิเศษ (คลิกที่ต้นไม้เพื่อเร่งโต)">
+                <span class="tool-icon">🚿</span>
+                <span class="tool-label">รดน้ำ</span>
+            </button>
+            <button class="tool-btn" data-tool="inspect" title="เรียนรู้ดอกไม้ (คลิกที่ดอกไม้)">
+                <span class="tool-icon">🔍</span>
+                <span class="tool-label">เรียนรู้</span>
+            </button>
+        </div>
+
+        <!-- Top Status Bar -->
+        <div class="top-center-status">
+            <div id="weather-indicator" class="status-panel weather-indicator-panel">
+                <span id="weather-status-text">สภาพอากาศ: ปลอดโปร่ง</span>
+            </div>
+        </div>
+
+        <!-- Floating Reset Button -->
+        <button id="reset-game-btn" class="reset-floating-btn" title="รีเซ็ตเกม">🔄 รีเซ็ต</button>
+    </div>
+
+    <script src="audio.js?v=2"></script>
+    <script src="weather.js?v=2"></script>
+    <script src="flower.js?v=2"></script>
+    <script src="flower-gacha.js?v=2"></script>
+    <script src="insects.js?v=2"></script>
+    <script src="animals.js?v=2"></script>
+    <script src="learn.js?v=2"></script>
+    <script src="app.js?v=2"></script>
+</body>
+</html>
